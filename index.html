@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f59e0b">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon.jpg">
+    <title>જધલ - Gujarati Edition</title>
+    <!-- Google Fonts for Gujarati and Fredoka -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+Gujarati:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Noto Sans Gujarati', 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 12px;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow-x: hidden;
+        }
+
+        /* 3D Card Flip Styling */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2rem;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        }
+
+        .card-front {
+            background: linear-gradient(145deg, #6366f1 0%, #4338ca 100%);
+            z-index: 2;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            z-index: 1;
+        }
+
+        .flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Roles Background */
+        .imposter-bg {
+            background: linear-gradient(145deg, #f43f5e 0%, #be123c 100%) !important;
+            border-color: #fda4af !important;
+        }
+
+        .civilian-bg {
+            background: linear-gradient(145deg, #10b981 0%, #047857 100%) !important;
+            border-color: #6ee7b7 !important;
+        }
+
+        /* Cartoon Tactile 3D Buttons */
+        .btn-cartoon {
+            transition: all 0.12s ease-out;
+            border-bottom-width: 6px;
+            position: relative;
+        }
+        .btn-cartoon:active {
+            border-bottom-width: 0px !important;
+            transform: translateY(6px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .fade-in { animation: fadeIn 0.25s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .bounce-slow {
+            animation: bounceSlow 2s infinite;
+        }
+        @keyframes bounceSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(6px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MAIN APP CONTAINER -->
+    <div id="app" class="w-full max-w-md bg-gradient-to-b from-slate-50 to-purple-50/50 rounded-[2.5rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5)] border-4 border-slate-700/20 overflow-hidden min-h-[720px] flex flex-col relative ring-8 ring-white/10">
+        
+        <!-- HEADER BANNER -->
+        <header class="p-5 text-center shrink-0 bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500 border-b-4 border-amber-600/30 relative overflow-hidden shadow-md">
+            <!-- Background Accent Shapes -->
+            <div class="absolute -top-6 -left-6 w-20 h-20 bg-white/20 rounded-full blur-sm pointer-events-none"></div>
+            <div class="absolute -bottom-6 -right-6 w-20 h-20 bg-white/20 rounded-full blur-sm pointer-events-none"></div>
+            
+            <h1 class="text-4xl font-black text-white tracking-wider drop-shadow-md" style="text-shadow: 3px 3px 0px #b45309, 5px 5px 0px #78350f;">જધલ</h1>
+            <div class="mt-1 flex items-center justify-center gap-2">
+                <span class="text-[11px] font-black text-amber-900 uppercase tracking-widest bg-amber-100/90 px-3 py-0.5 rounded-full shadow-inner">Gujarati Edition</span>
+            </div>
+        </header>
+
+        <!-- SCREEN 1: SETUP -->
+        <div id="screen-setup" class="flex-1 flex flex-col p-5 space-y-4 fade-in overflow-y-auto">
+            
+            <!-- Player Input Section -->
+            <div class="bg-white p-4 rounded-3xl border-3 border-indigo-100 shadow-sm space-y-3">
+                <label class="text-xs text-indigo-600 font-extrabold flex items-center gap-1.5 uppercase tracking-wide">
+                    <span>👥</span> ખેલાડીઓ ઉમેરો (Players)
+                </label>
+                <div class="flex gap-2">
+                    <input type="text" id="player-input" placeholder="ખેલાડીનું નામ..." class="flex-1 bg-indigo-50/60 text-slate-800 px-4 py-3 rounded-2xl border-2 border-indigo-200 focus:outline-none focus:border-indigo-500 font-bold placeholder-indigo-300 text-sm shadow-inner" onkeypress="handleEnter(event)">
+                    <button onclick="addPlayer()" class="btn-cartoon bg-indigo-600 border-indigo-800 hover:bg-indigo-700 text-white px-5 rounded-2xl font-black text-xl shadow-md">➕</button>
+                </div>
+                
+                <!-- Player List Container -->
+                <div class="max-h-[140px] overflow-y-auto space-y-2 pr-1" id="player-list-container">
+                    <div class="text-center text-indigo-300 py-5 font-bold bg-indigo-50/50 rounded-2xl border-2 border-dashed border-indigo-200/60 text-xs" id="empty-list-msg">
+                        કોઈ ખેલાડી ઉમેરાયેલ નથી! (ઓછામાં ઓછા ૩) 🤷‍♂️
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Settings Grid -->
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Imposters count -->
+                <div class="space-y-1">
+                    <label class="text-[11px] text-indigo-600 font-extrabold uppercase tracking-wider ml-1">ઇમ્પોસ્ટર સંખ્યા</label>
+                    <div class="flex bg-white p-1 rounded-2xl border-2 border-indigo-100 shadow-sm">
+                        <button onclick="setImposters(1)" id="btn-imp-1" class="flex-1 py-2 rounded-xl text-xs font-black bg-rose-500 text-white shadow-md transition-all">1 લોકો</button>
+                        <button onclick="setImposters(2)" id="btn-imp-2" class="flex-1 py-2 rounded-xl text-xs font-black text-slate-400 hover:text-rose-500 transition-all">2 લોકો</button>
+                    </div>
+                </div>
+                
+                <!-- Category Select -->
+                <div class="space-y-1">
+                    <label class="text-[11px] text-indigo-600 font-extrabold uppercase tracking-wider ml-1">કેટેગરી પસંદ કરો</label>
+                    <div class="relative">
+                        <select id="category-select" class="w-full bg-white text-slate-800 px-3 py-2.5 rounded-2xl border-2 border-indigo-100 font-extrabold appearance-none text-xs focus:outline-none focus:border-indigo-400 shadow-sm cursor-pointer">
+                            <option value="all">🌈 બધું મિક્સ (All)</option>
+                            <option value="food">🍔 ખોરાક (Food)</option>
+                            <option value="animals">🦁 પ્રાણીઓ (Animals)</option>
+                            <option value="places">🏰 જગ્યાઓ (Places)</option>
+                            <option value="objects">📱 વસ્તુઓ (Objects)</option>
+                            <option value="bollywood">🎬 બોલીવુડ (Bollywood)</option>
+                            <option value="jobs">👨‍⚕️ વ્યવસાય (Jobs)</option>
+                            <option value="nature">🌳 કુદરત (Nature)</option>
+                            <option value="festivals">🎉 તહેવારો (Festivals)</option>
+                        </select>
+                        <div class="absolute right-3 top-3 text-indigo-400 pointer-events-none text-xs">▼</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Troll Mode Card -->
+            <div class="bg-gradient-to-r from-amber-100 to-orange-100 p-3.5 rounded-2xl border-2 border-amber-300/80 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white p-2 rounded-xl text-2xl shadow-sm border border-amber-200">🤡</div>
+                    <div>
+                        <p class="font-black text-xs text-amber-900">ટ્રોલ મોડ (Troll Mode)</p>
+                        <p class="text-[10px] text-amber-800 font-bold opacity-80">બધા જ ઇમ્પોસ્ટર બની જશે!</p>
+                    </div>
+                </div>
+                
+                <!-- Toggle -->
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="troll-toggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                </label>
+            </div>
+
+            <!-- Start Game Button -->
+            <button onclick="startGame()" class="mt-auto btn-cartoon w-full bg-gradient-to-r from-emerald-500 to-teal-600 border-emerald-800 hover:from-emerald-600 hover:to-teal-700 text-white py-4 rounded-2xl font-black text-lg shadow-xl tracking-wide">
+                રમત શરૂ કરો 🚀
+            </button>
+        </div>
+
+        <!-- SCREEN 2: CARD REVEAL -->
+        <div id="screen-reveal" class="hidden flex-1 flex flex-col items-center justify-between p-5 fade-in h-full bg-gradient-to-b from-indigo-50/80 to-purple-50/80">
+            
+            <div class="text-center space-y-1 mt-1">
+                <div class="inline-block bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm">
+                    આમનો વારો છે
+                </div>
+                <h2 id="current-player-name" class="text-3xl font-black text-indigo-900 tracking-tight drop-shadow-sm">Player Name</h2>
+            </div>
+
+            <!-- The 3D Flip Card -->
+            <div class="flex-1 flex items-center justify-center w-full py-2 perspective-1000">
+                <div class="w-64 h-80 cursor-pointer group relative" id="game-card">
+                    <div class="card-inner w-full h-full">
+                        <!-- Front View -->
+                        <div class="card-front p-6 border-indigo-400/30">
+                            <div class="text-7xl mb-3 drop-shadow-lg bounce-slow">🕵️‍♂️</div>
+                            <p class="text-indigo-200/90 font-extrabold text-sm uppercase tracking-wider">તમારો ગુપ્ત શબ્દ જોવા</p>
+                            <p class="text-2xl font-black text-white uppercase tracking-wider mt-1 drop-shadow-md">દબાવી રાખો</p>
+                            <div class="mt-5 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/30 shadow-inner">
+                                <span class="text-white text-xs font-black tracking-wide">👆 Hold Card</span>
+                            </div>
+                        </div>
+                        <!-- Back View -->
+                        <div class="card-back p-6" id="card-back-content">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Control Area -->
+            <div class="w-full text-center space-y-3 h-24 flex flex-col justify-end">
+                <p class="text-xs text-slate-500 font-bold transition-opacity duration-300" id="pass-hint">
+                    કાર્ડ જોઈ લીધા પછી <span id="next-player-hint" class="text-indigo-700 font-black bg-indigo-100 px-2 py-0.5 rounded-lg border border-indigo-200">...</span> ને ફોન આપો
+                </p>
+
+                <button id="next-turn-btn" onclick="nextTurn()" class="hidden btn-cartoon w-full bg-gradient-to-r from-orange-500 to-amber-500 border-orange-700 hover:from-orange-600 hover:to-amber-600 text-white py-3.5 rounded-2xl font-black text-base shadow-lg">
+                    આગળનો ખેલાડી ➡️
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: DISCUSSION -->
+        <div id="screen-discussion" class="hidden flex-1 flex flex-col items-center justify-center p-6 text-center space-y-6 fade-in bg-gradient-to-b from-amber-50 to-orange-50">
+            <div class="w-28 h-28 bg-gradient-to-tr from-amber-400 to-yellow-300 rounded-full flex items-center justify-center border-4 border-amber-200 shadow-xl bounce-slow">
+                <span class="text-5xl drop-shadow-md">🗣️</span>
+            </div>
+            
+            <div class="space-y-1">
+                <h2 class="text-3xl font-black text-slate-800 tracking-tight">ચર્ચા કરો! (Discuss)</h2>
+                <p class="text-slate-500 font-bold text-xs">બધા ખેલાડીઓએ તેમનો શબ્દ જોઈ લીધો છે.</p>
+            </div>
+
+            <div class="bg-white p-5 rounded-3xl border-3 border-amber-200/80 w-full shadow-sm space-y-1">
+                <p class="text-amber-600/80 text-[10px] font-black uppercase tracking-widest">પ્રથમ બોલવાની શરૂઆત કરશે</p>
+                <p id="first-player-name" class="text-3xl font-black text-rose-500 tracking-wide">Player Name</p>
+            </div>
+
+            <button onclick="confirmReveal()" class="btn-cartoon w-full bg-gradient-to-r from-rose-500 to-pink-600 border-rose-800 hover:from-rose-600 hover:to-pink-700 text-white py-4 rounded-2xl font-black text-base shadow-xl">
+                પરિણામ જુઓ 👁️
+            </button>
+        </div>
+
+        <!-- SCREEN 4: RESULTS -->
+        <div id="screen-result" class="hidden flex-1 flex flex-col p-5 space-y-5 fade-in overflow-y-auto bg-gradient-to-b from-emerald-50 to-teal-50">
+            
+            <div id="troll-alert" class="hidden bg-amber-100 border-l-4 border-amber-500 p-3.5 rounded-r-2xl flex items-center gap-3 shadow-sm">
+                <span class="text-3xl">🤡</span>
+                <div>
+                    <p class="font-black text-xs text-amber-900">ટ્રોલ મોડ ધમાકો!</p>
+                    <p class="text-[11px] text-amber-800 font-bold">બધા જ ઇમ્પોસ્ટર (ગદ્દાર) હતા!</p>
+                </div>
+            </div>
+
+            <div class="text-center space-y-2">
+                <span class="text-emerald-700 uppercase tracking-widest text-[10px] font-black bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">સાચો ગુપ્ત શબ્દ</span>
+                <div class="bg-white p-5 rounded-3xl border-b-6 border-emerald-300 shadow-md relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-teal-400"></div>
+                    <h2 id="reveal-word" class="text-3xl font-black text-slate-800 tracking-wide">PIZZA</h2>
+                </div>
+            </div>
+
+            <div class="flex-1">
+                <h3 class="text-slate-500 font-black mb-2 text-xs flex items-center gap-2 uppercase tracking-wide">
+                    <span class="w-2.5 h-2.5 bg-rose-500 rounded-full animate-pulse"></span> ઇમ્પોસ્ટર કોણ હતા?
+                </h3>
+                <div id="imposter-list" class="space-y-2.5"></div>
+            </div>
+
+            <div class="space-y-3 pt-2">
+                <button onclick="resetGame()" class="btn-cartoon w-full bg-gradient-to-r from-emerald-600 to-teal-600 border-emerald-900 hover:from-emerald-700 hover:to-teal-700 text-white py-4 rounded-2xl font-black text-base shadow-lg tracking-wide">
+                    ફરી રમો 🔄
+                </button>
+                
+                <p class="text-center text-[10px] font-bold text-slate-400">Made with ❤️ By Aadhar</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CONFIRMATION MODAL -->
+    <div id="confirmation-modal" class="hidden fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50 fade-in">
+        <div class="bg-white w-full max-w-xs p-6 rounded-[2.5rem] shadow-2xl text-center border-4 border-white ring-8 ring-black/20 space-y-4">
+            <div class="text-5xl bounce-slow">🤔</div>
+            <div>
+                <h3 class="text-xl font-black text-slate-800">પાક્કું પરિણામ જોવું છે?</h3>
+                <p class="text-slate-500 font-bold text-xs mt-1">શું ચર્ચા પૂરી થઈ ગઈ છે?</p>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="closeModal()" class="flex-1 py-3 rounded-2xl font-black bg-slate-100 text-slate-600 hover:bg-slate-200 border-2 border-slate-200">ના ❌</button>
+                <button onclick="proceedToResults()" class="flex-1 py-3 rounded-2xl font-black bg-rose-500 text-white shadow-lg hover:bg-rose-600 border-b-4 border-rose-700">હા ✅</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white px-5 py-2.5 rounded-2xl shadow-2xl opacity-0 transition-all pointer-events-none font-bold text-xs z-50 flex gap-2 items-center border border-white/20">
+        <span>🔔</span> <span id="toast-text">Notification</span>
+    </div>
+
+    <script>
+        // --- SOUND EFFECTS (Web Audio API Synthesizer) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            if (type === 'pop') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } else if (type === 'flip') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(250, now);
+                osc.frequency.exponentialRampToValueAtTime(500, now + 0.12);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+                osc.start(now);
+                osc.stop(now + 0.12);
+            } else if (type === 'win') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            }
+        }
+
+        function vibrate() {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(40);
+            }
+        }
+
+        // --- GUJARATI WORD DATABASE ---
+        const WORDS = {
+            food: ["પાણીપુરી", "ઢોસા", "પીઝા", "જલેબી", "વડાપાઉં", "બર્ગર", "આઈસ્ક્રીમ", "ચોકલેટ", "ગાંઠિયા", "ભજીયા", "રોટલો", "શ્રીખંડ", "કેરીનો રસ", "સમોસા", "મેગી", "સેવ ઉસળ", "દાબેલી", "ખમણ", "ઢોકળા", "ઈડલી", "મંચુરિયન", "સેન્ડવીચ", "ભેળ", "પાસ્તા", "નૂડલ્સ", "સૂપ", "સલાડ", "પાપડ", "છાશ", "લસ્સી", "દૂધપાક", "બાસુંદી", "ગુલાબ જાંબુ", "કાજુ કતરી", "પેંડા", "બરફી", "લાડુ", "મોહનથાળ", "સુખડી", "શીરો", "ઉપમા", "પૌવા", "થેપલા", "મુઠીયા", "પાતરા", "ખાંડવી", "ફાફડા", "ચોળાફળી", "કચોરી", "પફ", "બિસ્કિટ", "બ્રેડ", "બટર", "ચીઝ", "પનીર", "દહીં", "ઘી", "દૂધ", "ચા", "કોફી", "જ્યુસ", "શરબત", "નાળિયેર પાણી", "સફરજન", "કેળા", "કેરી", "દ્રાક્ષ", "તરબૂચ", "પપૈયા", "દાડમ", "જામફળ", "સંતરા", "ચીકુ", "અનાનસ", "બટાકા", "ડુંગળી", "ટામેટા", "રીંગણ", "કોબીજ", "ભીંડા", "પાલક", "લસણ", "આદુ", "મરચાં", "લીંબુ", "મકાઈ", "પોપકોર્ન", "ઉત્તપમ", "મેંદુવડા", "ફ્રેન્કી", "ઊંધિયું"],
+            
+            animals: ["સિંહ", "વાઘ", "હાથી", "કૂતરો", "બિલાડી", "ઘોડો", "ગાય", "ભેંસ", "બકરી", "ઘેટું", "ગધેડો", "ઊંટ", "જીરાફ", "ઝીબ્રા", "કાંગારૂ", "પાંડા", "રીંછ", "હરણ", "વાંદરો", "ગોરીલા", "ચિમ્પાન્જી", "સસલું", "ઉંદર", "ખિસકોલી", "સાપ", "મગર", "કાચબો", "દેડકો", "ગરોળી", "માછલી", "શાર્ક", "વ્હેલ", "ડોલ્ફિન", "ઓક્ટોપસ", "પેંગ્વિન", "ગરુડ", "ઘુવડ", "મોર", "પોપટ", "કબૂતર", "કાગડો", "ચકલી", "હંસ", "બતક", "મરઘી", "શાહમૃગ", "ફ્લેમિંગો", "પતંગિયું", "મધમાખી", "કીડી", "મચ્છર", "માખી", "કરોળિયો", "વીંછી", "દીપડો", "ચિત્તો", "વરુ", "શિયાળ", "ગેંડો", "હિપોપોટેમસ", "ડાયનોસોર"],
+            
+            places: ["શાળા", "કોલેજ", "ઓફિસ", "હોસ્પિટલ", "બેંક", "પોસ્ટ ઓફિસ", "પોલીસ સ્ટેશન", "એરપોર્ટ", "બંદર", "હોટેલ", "રેસ્ટોરન્ટ", "સિનેમા હોલ", "મોલ", "બજાર", "દુકાન", "બગીચો", "પ્રાણીસંગ્રહાલય", "મ્યુઝિયમ", "લાઈબ્રેરી", "જીમ", "સ્ટેડિયમ", "સ્વિમિંગ પૂલ", "મંદિર", "મસ્જિદ", "ચર્ચ", "ગુરુદ્વારા", "ખેતર", "ગામડું", "શહેર", "જંગલ", "પહાડ", "નદી", "તળાવ", "દરિયાકિનારો", "રણ", "ટાપુ", "ગુફા", "મહેલ", "કિલ્લો", "પુલ", "બંગલો", "ફ્લેટ", "રસોડું", "બાથરૂમ", "બેડરૂમ", "હવાઈ મથક", "તાજમહેલ", "સ્ટેચ્યુ ઓફ યુનિટી", "ગિરનાર", "સોમનાથ", "દ્વારકા", "અંબાજી", "પાવાગઢ", "સાપુતારા"],
+            
+            objects: ["મોબાઈલ", "ચાર્જર", "ઇયરફોન", "લેપટોપ", "કોમ્પ્યુટર", "કીબોર્ડ", "માઉસ", "ટીવી", "રિમોટ", "કેમેરા", "ઘડિયાળ", "પંખો", "એસી", "હીટર", "લાઈટ", "ટ્યુબલાઈટ", "ટોર્ચ", "ઇસ્ત્રી", "વોશિંગ મશીન", "ફ્રિજ", "માઇક્રોવેવ", "મિક્સર", "ઓવન", "સ્ટવ", "ગેસ સિલિન્ડર", "નળ", "ડોલ", "સાબુ", "શેમ્પૂ", "ટૂથબ્રશ", "ટૂથપેસ્ટ", "કાંસકો", "અરીસો", "ટુવાલ", "કપડાં", "શર્ટ", "પેન્ટ", "જીન્સ", "સાડી", "બુટ", "મોજાં", "ચપ્પલ", "બેગ", "પર્સ", "વોલેટ", "બેલ્ટ", "ટોપી", "ચશ્મા", "વીંટી", "પેન", "પેન્સિલ", "રબર", "ચોપડી", "નોટબુક", "કાતર", "ચપ્પુ", "ચમચી", "થાળી", "બોટલ", "તાળું", "ચાવી", "હેલ્મેટ", "બેટ", "બોલ"],
+            
+            bollywood: ["અમિતાભ બચ્ચન", "શાહરુખ ખાન", "સલમાન ખાન", "આમિર ખાન", "અક્ષય કુમાર", "અજય દેવગન", "રિતિક રોશન", "રણવીર સિંહ", "રણબીર કપૂર", "શાહિદ કપૂર", "સંજય દત્ત", "સની દેઓલ", "ગોવિંદા", "અનિલ કપૂર", "પરેશ રાવલ", "અનુપમ ખેર", "જોની લીવર", "રાજપાલ યાદવ", "આલિયા ભટ્ટ", "દીપિકા પાદુકોણ", "પ્રિયંકા ચોપરા", "કરીના કપૂર", "કેટરીના કૈફ", "શ્રદ્ધા કપૂર", "કિયારા અડવાણી", "કાજોલ", "માધુરી દીક્ષિત", "ઐશ્વર્યા રાય", "અરિજિત સિંહ", "નરેન્દ્ર મોદી", "વિરાટ કોહલી", "ધોની", "મુકેશ અંબાણી", "જેઠાલાલ", "દયા ભાભી", "સચિન તેંડુલકર", "રોહિત શર્મા", "હાર્દિક પંડ્યા"],
+            
+            jobs: ["ડોક્ટર", "નર્સ", "એન્જિનિયર", "શિક્ષક", "વિક્રેટા", "વકીલ", "જજ", "પોલીસ", "સૈનિક", "પાયલોટ", "ડ્રાઈવર", "કંડક્ટર", "ખેડૂત", "સુથાર", "પ્લમ્બર", "ઇલેક્ટ્રિશિયન", "દરજી", "વાળંદ", "મોચી", "દુકાનદાર", "વેપારી", "મેનેજર", "ચોકીદાર", "સફાઈ કામદાર", "રસોઈયા", "એક્ટર", "સિંગર", "ડાન્સર", "ચિત્રકાર", "ફોટોગ્રાફર", "પત્રકાર", "નેતા", "ક્રિકેટર", "વૈજ્ઞાનિક", "અવકાશયાત્રી", "જાદુગર", "ટપાલી", "દૂધવાળો", "સોની", "લુહાર", "કુંભાર", "માળી", "યુટ્યુબર"],
+            
+            nature: ["સૂર્ય", "ચંદ્ર", "તારા", "આકાશ", "વાદળ", "વરસાદ", "વીજળી", "મેઘધનુષ", "પવન", "વાવાઝોડું", "બરફ", "ધુમ્મસ", "ગરમી", "ઠંડી", "આગ", "પાણી", "માટી", "પથ્થર", "રેતી", "દરિયો", "મોજાં", "ઝાડ", "પાંદડા", "ફૂલ", "ફળ", "ડાળી", "ઘાસ", "જ્વાળામુખી", "ધરતીકંપ", "પૃથ્વી", "સૂર્યોદય", "સૂર્યાસ્ત", "દિવસ", "રાત", "વસંત", "ચોમાસુ", "શિયાળો", "ઉનાળો"],
+            
+            festivals: ["દિવાળી", "હોળી", "ધુળેટી", "નવરાત્રી", "રક્ષાબંધન", "જન્માષ્ટમી", "ગણેશ ચતુર્થી", "ઉત્તરાયણ", "દશેરા", "ઈદ", "નાતાલ", "સ્વતંત્રતા દિવસ", "પ્રજાસત્તાક દિવસ", "લગ્ન", "જન્મદિવસ", "પાર્ટી", "હનુમાન જયંતિ", "રામ નવમી", "મહાશિવરાત્રી", "ભાઈબીજ"]
+        };
+
+        // --- STATE MANAGEMENT ---
+        let players = [];
+        let impostersCount = 1;
+        let gamePlayers = []; 
+        let currentPlayerIndex = 0;
+        let isTrollRound = false;
+        let secretWord = "";
+
+        // --- DOM ELEMENTS ---
+        const screens = {
+            setup: document.getElementById('screen-setup'),
+            reveal: document.getElementById('screen-reveal'),
+            discussion: document.getElementById('screen-discussion'),
+            result: document.getElementById('screen-result')
+        };
+        const modal = document.getElementById('confirmation-modal');
+        const playerInput = document.getElementById('player-input');
+        const playerListContainer = document.getElementById('player-list-container');
+        const emptyListMsg = document.getElementById('empty-list-msg');
+        const cardElement = document.getElementById('game-card');
+        const cardBackContent = document.getElementById('card-back-content');
+        const nextTurnBtn = document.getElementById('next-turn-btn');
+
+        // --- FUNCTIONS ---
+
+        function handleEnter(e) { 
+            if (e.key === 'Enter') addPlayer(); 
+        }
+
+        function addPlayer() {
+            const name = playerInput.value.trim();
+            if (!name) return showToast("મહેરબાની કરીને નામ લખો! ✍️");
+            if (players.includes(name)) return showToast("આ નામ ઉમેરાયેલ છે! 🚫");
+            
+            players.push(name);
+            playerInput.value = '';
+            playSound('pop');
+            vibrate();
+            renderPlayerList();
+        }
+
+        function removePlayer(index) {
+            players.splice(index, 1);
+            playSound('pop');
+            renderPlayerList();
+        }
+
+        function renderPlayerList() {
+            playerListContainer.innerHTML = '';
+            if (players.length === 0) {
+                playerListContainer.appendChild(emptyListMsg);
+                return;
+            }
+            players.forEach((player, index) => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-indigo-50/70 border border-indigo-100 px-3.5 py-2.5 rounded-2xl shadow-sm fade-in";
+                div.innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 text-white flex items-center justify-center font-black text-xs shadow-sm">${player.charAt(0)}</div>
+                        <span class="font-extrabold text-slate-800 text-sm">${player}</span>
+                    </div>
+                    <button onclick="removePlayer(${index})" class="text-rose-500 hover:text-rose-700 font-bold px-2 py-1 bg-rose-100/80 hover:bg-rose-200 rounded-xl text-xs transition-colors">✕</button>
+                `;
+                playerListContainer.appendChild(div);
+            });
+        }
+
+        function setImposters(count) {
+            impostersCount = count;
+            playSound('pop');
+            const btn1 = document.getElementById('btn-imp-1');
+            const btn2 = document.getElementById('btn-imp-2');
+            
+            if(count === 1) {
+                btn1.className = "flex-1 py-2 rounded-xl text-xs font-black bg-rose-500 text-white shadow-md transition-all";
+                btn2.className = "flex-1 py-2 rounded-xl text-xs font-black text-slate-400 hover:text-rose-500 transition-all";
+            } else {
+                btn1.className = "flex-1 py-2 rounded-xl text-xs font-black text-slate-400 hover:text-rose-500 transition-all";
+                btn2.className = "flex-1 py-2 rounded-xl text-xs font-black bg-rose-500 text-white shadow-md transition-all";
+            }
+        }
+
+        function startGame() {
+            if (players.length < 3) return showToast("ઓછામાં ઓછા ૩ ખેલાડીઓ જોઈએ! 👥");
+            if (impostersCount >= players.length) return showToast("ઇમ્પોસ્ટર ખેલાડી કરતાં વધારે ન હોઈ શકે! ⚠️");
+
+            playSound('win');
+            vibrate();
+
+            isTrollRound = false;
+            const trollModeOn = document.getElementById('troll-toggle').checked;
+            if (trollModeOn && Math.random() < 0.25) isTrollRound = true;
+
+            const catSelect = document.getElementById('category-select').value;
+            let pool = catSelect === 'all' ? Object.values(WORDS).flat() : WORDS[catSelect];
+            secretWord = pool[Math.floor(Math.random() * pool.length)];
+
+            if (isTrollRound) {
+                gamePlayers = players.map(name => ({ name, role: 'imposter' }));
+            } else {
+                let indices = Array.from({length: players.length}, (_, i) => i);
+                for (let i = indices.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [indices[i], indices[j]] = [indices[j], indices[i]];
+                }
+                const impIndices = indices.slice(0, impostersCount);
+                gamePlayers = players.map((name, i) => ({
+                    name, role: impIndices.includes(i) ? 'imposter' : 'civilian'
+                }));
+            }
+
+            currentPlayerIndex = 0;
+            switchScreen('reveal');
+            setupCardForPlayer();
+        }
+
+        function setupCardForPlayer() {
+            const player = gamePlayers[currentPlayerIndex];
+            document.getElementById('current-player-name').innerText = player.name;
+            document.getElementById('next-player-hint').innerText = currentPlayerIndex < gamePlayers.length - 1 ? gamePlayers[currentPlayerIndex + 1].name : "સૌ પ્રથમ ખેલાડી";
+
+            cardElement.classList.remove('flipped');
+            nextTurnBtn.classList.add('hidden');
+            
+            if (player.role === 'imposter') {
+                cardBackContent.className = "card-back p-6 imposter-bg";
+                cardBackContent.innerHTML = `
+                    <div class="text-6xl mb-3 bg-black/20 backdrop-blur-sm rounded-full p-3 shadow-inner">😈</div>
+                    <h2 class="text-2xl font-black text-white mb-1 tracking-wide">તમે જધલ છો</h2>
+                    <p class="text-xs text-rose-100 font-bold bg-black/30 px-4 py-1.5 rounded-full border border-white/20">🤫 શૂૂ.... કોઈને કહેતા નહીં!</p>
+                `;
+            } else {
+                cardBackContent.className = "card-back p-6 civilian-bg";
+                cardBackContent.innerHTML = `
+                    <div class="text-6xl mb-2 bg-white/20 backdrop-blur-sm rounded-full p-3 shadow-inner">✅</div>
+                    <p class="text-xs text-emerald-100 font-bold uppercase tracking-wider mb-1">તમારો ગુપ્ત શબ્દ</p>
+                    <h2 class="text-3xl font-black text-white mb-2 break-all bg-black/20 px-5 py-2.5 rounded-2xl text-center shadow-inner border border-white/20">${secretWord}</h2>
+                `;
+            }
+        }
+
+        // --- HOLD TO REVEAL INTERACTIONS ---
+        const startHold = (e) => { 
+            if(e.cancelable) e.preventDefault(); 
+            if(!cardElement.classList.contains('flipped')) {
+                cardElement.classList.add('flipped'); 
+                playSound('flip');
+                vibrate();
+            }
+        };
+
+        const endHold = (e) => { 
+            if(e.cancelable) e.preventDefault(); 
+            if(cardElement.classList.contains('flipped')) {
+                cardElement.classList.remove('flipped'); 
+                playSound('flip');
+                setTimeout(() => {
+                    nextTurnBtn.classList.remove('hidden');
+                    const screenReveal = document.getElementById('screen-reveal');
+                    screenReveal.scrollTop = screenReveal.scrollHeight;
+                }, 250); 
+            }
+        };
+
+        cardElement.addEventListener('mousedown', startHold);
+        document.addEventListener('mouseup', () => {
+            if(cardElement.classList.contains('flipped')) {
+                cardElement.classList.remove('flipped');
+                setTimeout(() => nextTurnBtn.classList.remove('hidden'), 250);
+            }
+        });
+        cardElement.addEventListener('touchstart', startHold, {passive: false});
+        cardElement.addEventListener('touchend', endHold, {passive: false});
+
+        function nextTurn() {
+            playSound('pop');
+            currentPlayerIndex++;
+            if (currentPlayerIndex >= gamePlayers.length) {
+                const starter = gamePlayers[Math.floor(Math.random() * gamePlayers.length)].name;
+                document.getElementById('first-player-name').innerText = starter;
+                switchScreen('discussion');
+            } else {
+                setupCardForPlayer();
+            }
+        }
+
+        // --- CONFIRMATION & RESULTS ---
+        function confirmReveal() {
+            playSound('pop');
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            playSound('pop');
+            modal.classList.add('hidden');
+        }
+
+        function proceedToResults() {
+            closeModal();
+            playSound('win');
+            vibrate();
+            showResults();
+        }
+
+        function showResults() {
+            const wordDisplay = document.getElementById('reveal-word');
+            const impList = document.getElementById('imposter-list');
+            const trollAlert = document.getElementById('troll-alert');
+            impList.innerHTML = '';
+
+            if (isTrollRound) {
+                wordDisplay.innerText = "??? (કોઈ શબ્દ નહોતો!)";
+                trollAlert.classList.remove('hidden');
+                impList.innerHTML = `
+                    <div class="bg-amber-100/90 p-4 rounded-2xl flex items-center gap-3 border-2 border-amber-300 shadow-sm">
+                        <span class="text-3xl">🤡</span>
+                        <span class="text-amber-900 font-black text-sm">બધા જ ખેલાડીઓ ઇમ્પોસ્ટર હતા!</span>
+                    </div>`;
+            } else {
+                wordDisplay.innerText = secretWord;
+                trollAlert.classList.add('hidden');
+                gamePlayers.filter(p => p.role === 'imposter').forEach(imp => {
+                    impList.innerHTML += `
+                        <div class="bg-white p-3.5 rounded-2xl flex items-center gap-3 border-2 border-rose-100 shadow-sm">
+                            <span class="text-2xl">😈</span>
+                            <span class="text-slate-800 font-black text-base">${imp.name}</span>
+                        </div>`;
+                });
+            }
+            switchScreen('result');
+        }
+
+        function resetGame() { 
+            playSound('pop');
+            switchScreen('setup'); 
+        }
+
+        function switchScreen(name) {
+            Object.values(screens).forEach(s => s.classList.add('hidden'));
+            screens[name].classList.remove('hidden');
+            screens[name].classList.add('fade-in');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => toast.style.opacity = '0', 2200);
+        }
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>
